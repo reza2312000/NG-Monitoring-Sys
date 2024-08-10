@@ -6,44 +6,74 @@ const ToggleFunctionContext = createContext();
 export const ToggleFunctionContextProvider = ({ children }) => {
   const {
     setIsNgProduksiBtnClicked,
-    setIsNgMasukBtnClicked,
+    setIsLaporanNgBtnClicked,
     setIsNgKeluarBtnClicked,
     setIsHistoryBtnClicked,
+    setIsDashboardBtnClicked,
+    setIsKelolaPartBtnClicked
   } = useStateBasketContext();
+
+  const toggleDashboard = () => {
+    setIsDashboardBtnClicked(true)
+    setIsNgProduksiBtnClicked(false);
+    setIsLaporanNgBtnClicked(false);
+    setIsNgKeluarBtnClicked(false);
+    setIsHistoryBtnClicked(false);
+    setIsKelolaPartBtnClicked(false);
+  };
 
   const toggleNgProduksi = () => {
     setIsNgProduksiBtnClicked(true);
-    setIsNgMasukBtnClicked(false);
+    setIsDashboardBtnClicked(false)
+    setIsLaporanNgBtnClicked(false);
     setIsNgKeluarBtnClicked(false);
     setIsHistoryBtnClicked(false);
+    setIsKelolaPartBtnClicked(false);
   };
 
-  const toggleNgMasuk = () => {
-    setIsNgMasukBtnClicked(true);
+  const toggleLaporanNg = () => {
+    setIsLaporanNgBtnClicked(true);
+    setIsDashboardBtnClicked(false)
     setIsNgProduksiBtnClicked(false);
     setIsNgKeluarBtnClicked(false);
     setIsHistoryBtnClicked(false);
+    setIsKelolaPartBtnClicked(false);
   };
 
   const toggleNgKeluar = () => {
     setIsNgKeluarBtnClicked(true);
-    setIsNgMasukBtnClicked(false);
+    setIsDashboardBtnClicked(false)
+    setIsLaporanNgBtnClicked(false);
     setIsNgProduksiBtnClicked(false);
     setIsHistoryBtnClicked(false);
+    setIsKelolaPartBtnClicked(false);
   };
 
   const toggleHistory = () => {
     setIsHistoryBtnClicked(true);
+    setIsDashboardBtnClicked(false)
     setIsNgKeluarBtnClicked(false);
-    setIsNgMasukBtnClicked(false);
+    setIsLaporanNgBtnClicked(false);
     setIsNgProduksiBtnClicked(false);
+    setIsKelolaPartBtnClicked(false);
   };
 
+  const toggleKelolaPart = () => {
+    setIsKelolaPartBtnClicked(true);
+    setIsHistoryBtnClicked(false);
+    setIsDashboardBtnClicked(false)
+    setIsNgKeluarBtnClicked(false);
+    setIsLaporanNgBtnClicked(false);
+    setIsNgProduksiBtnClicked(false);
+  }
+
   const contextValue = {
+    toggleDashboard,
     toggleNgProduksi,
-    toggleNgMasuk,
+    toggleLaporanNg,
     toggleNgKeluar,
     toggleHistory,
+    toggleKelolaPart
   };
 
   return (

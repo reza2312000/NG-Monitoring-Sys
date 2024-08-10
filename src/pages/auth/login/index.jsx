@@ -3,7 +3,7 @@ import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { useStateBasketContext } from "@/context/reza/StateBasketContext";
+import { useStateBasketContext } from "@/context/StateBasketContext";
 
 const LoginPage = () => {
   const { push } = useRouter();

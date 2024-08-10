@@ -1,9 +1,9 @@
-import { getHistory } from "@/lib/firestore/dataController/dataController";
+import { getAllPart } from "@/lib/firestore/dataController/dataController";
 
-export default async function handlerGetHistory(req, res) {
+export default async function handlerGetAllPart(req, res) {
   if (req.method === "GET") {
     try {
-      const data = await getHistory();
+      const data = await getAllPart();
       res.status(200).json(data);
     } catch (error) {
       res.status(400).json({ message: "Bad request" });

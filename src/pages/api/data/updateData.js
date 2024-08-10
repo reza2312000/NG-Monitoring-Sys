@@ -3,9 +3,33 @@ import { updateData } from "@/lib/firestore/dataController/dataController";
 export default async function handlerUpdateData(req, res) {
   if (req.method === "PATCH") {
     try {
-      const { docId1, docId2, part, machine, shift, date, jenisNg, jumlahNg, estimasiBerat, aktualBerat } = req.body;
+      const {
+        docId1,
+        docId2,
+        docId3,
+        part,
+        machine,
+        shift,
+        date,
+        jenisNg,
+        jumlahNg,
+        estimasiBerat,
+        aktualBerat,
+      } = req.body;
 
-      await updateData(docId1, docId2, part, machine, shift, date, jenisNg, jumlahNg, estimasiBerat, aktualBerat);
+      await updateData(
+        docId1,
+        docId2,
+        docId3,
+        part,
+        machine,
+        shift,
+        date,
+        jenisNg,
+        jumlahNg,
+        estimasiBerat,
+        aktualBerat
+      );
       res.status(200).json({
         message: "Form data updated in Firestore successfully",
       });

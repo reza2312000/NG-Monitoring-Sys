@@ -1,8 +1,8 @@
-import { useDataControllerContext } from "@/context/reza/DataControllerContext";
-import { useStateBasketContext } from "@/context/reza/StateBasketContext";
+import Modal from "@/components/Modal";
+import { useDataControllerContext } from "@/context/DataControllerContext";
+import { useStateBasketContext } from "@/context/StateBasketContext";
 import { formatDate } from "date-fns";
-
-const { default: Modal } = require("@/components/Modal");
+import { useEffect } from "react";
 
 const ModalAddData = () => {
   const {
@@ -15,26 +15,25 @@ const ModalAddData = () => {
     setPart,
     shift,
     date,
+    isError,
+    setIsError,
     setIsModalAddDataOpen,
-    estimasiTotalBerat,
     setEstimasiTotalBerat,
     isBtnLoading,
+    allDataPart,
+    estimasiTotalBerat,
   } = useStateBasketContext();
-  const { addData } = useDataControllerContext();
+  const { addData, getAllPart } = useDataControllerContext();
 
-  if (part === "Lowertow") {
-    let Lowertow = 0;
-    part1 = jumlahNg * 5;
-    setEstimasiTotalBerat(Lowertow);
-  } else if (part === "Part 2") {
-    let part2 = 0;
-    part2 = jumlahNg * 10;
-    setEstimasiTotalBerat(part2);
-  } else if (part === "Part 3") {
-    let part3 = 0;
-    part3 = jumlahNg * 1000;
-    setEstimasiTotalBerat(part3);
-  }
+  useEffect(() => {
+    const filteredPart = allDataPart.find((item) => item.nama === part);
+    if (filteredPart) {
+      const countTotalNg = jumlahNg * filteredPart.estimasiBerat;
+      setEstimasiTotalBerat(countTotalNg);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [part, jumlahNg]);
 
   return (
     <Modal
@@ -43,7 +42,10 @@ const ModalAddData = () => {
           <div className="flex justify-between">
             <h1>Tambah Data</h1>
             <button
-              onClick={() => setIsModalAddDataOpen(false)}
+              onClick={() => {
+                setIsModalAddDataOpen(false);
+                setIsError(false);
+              }}
               className="me-1 mb-3"
             >
               ✕
@@ -59,9 +61,19 @@ const ModalAddData = () => {
                 <span className="text-sm font-semibold">
                   Shift : <span className="text-primary ms-1">{shift}</span>
                 </span>
-                <span className="text-sm font-semibold ms-3">
+                <span
+                  className={
+                    isError
+                      ? "text-sm text-error underline font-semibold ms-3"
+                      : "text-sm font-semibold ms-3"
+                  }
+                >
                   Date :
-                  <span className="text-primary ms-1">
+                  <span
+                    className={
+                      isError ? "text-error ms-1" : "text-primary ms-1"
+                    }
+                  >
                     {date ? formatDate(new Date(date), "dd/MM/yyyy") : "-"}
                   </span>
                 </span>
@@ -75,10 +87,11 @@ const ModalAddData = () => {
                   onChange={(e) => setPart(e.target.value)}
                   className="select select-sm select-bordered mt-1 w-full"
                 >
-                  <option>Pilih Part</option>
-                  <option value="Part 1">Lowertow</option>
-                  <option value="Part 2">Part 2</option>
-                  <option value="Part 3">Part 3</option>
+                  {allDataPart?.map((item) => (
+                    <option key={item.id} value={item.nama}>
+                      {item.nama}
+                    </option>
+                  ))}
                 </select>
               </label>
               <label className="flex flex-col mt-3">
@@ -86,7 +99,7 @@ const ModalAddData = () => {
                 <span>
                   <select
                     value={jenisNg}
-                    onChange={(e) => setJenisNg((e.target.value))}
+                    onChange={(e) => setJenisNg(e.target.value)}
                     className="select select-sm select-bordered mt-1 w-full"
                   >
                     <option value="Patah">Patah</option>
@@ -100,7 +113,11 @@ const ModalAddData = () => {
                 <span>
                   <input
                     value={jumlahNg}
-                    onChange={(e) => setJumlahNg(Number(e.target.value))}
+                    onChange={(e) =>
+                      setJumlahNg(
+                        e.target.value === "" ? "" : Number(e.target.value)
+                      )
+                    }
                     type="number"
                     className="input input-sm input-bordered mt-1 w-full"
                   />
@@ -113,7 +130,9 @@ const ModalAddData = () => {
                 <span>
                   <input
                     value={estimasiTotalBerat ? `${estimasiTotalBerat} gr` : 0}
-                    onChange={(e) => setEstimasiTotalBerat(Number(e.target.value))}
+                    onChange={(e) =>
+                      setEstimasiTotalBerat(Number(e.target.value))
+                    }
                     type="text"
                     className="input input-sm input-bordered mt-1 w-full"
                     disabled

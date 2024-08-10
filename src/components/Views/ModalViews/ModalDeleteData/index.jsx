@@ -1,6 +1,6 @@
 import Modal from "@/components/Modal";
-import { useDataControllerContext } from "@/context/reza/DataControllerContext";
-import { useStateBasketContext } from "@/context/reza/StateBasketContext";
+import { useDataControllerContext } from "@/context/DataControllerContext";
+import { useStateBasketContext } from "@/context/StateBasketContext";
 
 const ModalDeleteData = (props) => {
   const { setIsModalDeleteDataOpen, isBtnLoading } = useStateBasketContext();

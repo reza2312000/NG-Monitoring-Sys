@@ -3,26 +3,32 @@ import React, { createContext, useContext, useState } from "react";
 const StateBasketContext = createContext();
 
 export const StateBasketContextProvider = ({ children }) => {
-  const [isNgProduksiBtnClicked, setIsNgProduksiBtnClicked] = useState(true);
-  const [isNgMasukBtnClicked, setIsNgMasukBtnClicked] = useState(false);
+  const [isDashboardBtnClicked, setIsDashboardBtnClicked] = useState(true);
+  const [isNgProduksiBtnClicked, setIsNgProduksiBtnClicked] = useState(false);
+  const [isLaporanNgBtnClicked, setIsLaporanNgBtnClicked] = useState(false);
   const [isNgKeluarBtnClicked, setIsNgKeluarBtnClicked] = useState(false);
+  const [isKelolaPartBtnClicked, setIsKelolaPartBtnClicked] = useState(false);
   const [isHistoryBtnClicked, setIsHistoryBtnClicked] = useState(false);
 
   const [isUiHeaderDisabled, setIsUiHeaderDisabled] = useState(false);
 
   const [docId1, setDocId1] = useState("");
   const [docId2, setDocId2] = useState("");
-  const [part, setPart] = useState("Part 1");
+  const [docId3, setDocId3] = useState("");
+  const [part, setPart] = useState("CT78");
   const [shift, setShift] = useState("1");
   const [machine, setMachine] = useState("Mesin 1");
   const [date, setDate] = useState("");
   const [jenisNg, setJenisNg] = useState("Patah");
-  const [jumlahNg, setJumlahNg] = useState();
+  const [jumlahNg, setJumlahNg] = useState(null);
+  const [dataTotal, setDataTotal] = useState();
   const [status, setStatus] = useState("Waiting");
-  const [estimasiTotalBerat, setEstimasiTotalBerat] = useState(0);
-  const [actualTotalBerat, setActualTotalBerat] = useState(0);
-
-  const [weightTolerance, setWeightTolerance] = useState();
+  const [estimasiTotalBerat, setEstimasiTotalBerat] = useState(null);
+  const [actualTotalBerat, setActualTotalBerat] = useState(null);
+  const [kodePart, setKodePart] = useState("");
+  const [namaPart, setNamaPart] = useState("");
+  const [estimasiBeratPart, setEstimasiBeratPart] = useState(null);
+  const [weightTolerance, setWeightTolerance] = useState(null);
 
   const [selectedPart, setSelectedPart] = useState("");
   const [selectedShift, setSelectedShift] = useState("");
@@ -35,10 +41,13 @@ export const StateBasketContextProvider = ({ children }) => {
   const [selectedStatus, setSelectedStatus] = useState("");
 
   const [allDataReport, setAllDataReport] = useState([]);
+  const [allDataPart, setAllDataPart] = useState([]);
   const [allDataByNik, setAllDataByNik] = useState([]);
-  const [historyData, setHistoryData] = useState([]);
+  const [recordData, setRecordData] = useState([]);
 
   const [isModalAddDataOpen, setIsModalAddDataOpen] = useState(false);
+  const [isModalUpdatePartOpen, setIsModalUpdatePartOpen] = useState(false);
+  const [isModalAddPartOpen, setIsModalAddPartOpen] = useState(false);
   const [isModalUpdateDataOpen, setIsModalUpdateDataOpen] = useState(false);
   const [isModalDeleteDataOpen, setIsModalDeleteDataOpen] = useState(false);
   const [isModalNewReportOpen, setIsModalNewReportOpen] = useState(false);
@@ -52,19 +61,35 @@ export const StateBasketContextProvider = ({ children }) => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const [isError, setIsError] = useState(false);
+
   const contextValue = {
-    isNgMasukBtnClicked,
+    isLaporanNgBtnClicked,
     isNgProduksiBtnClicked,
     isHistoryBtnClicked,
+    isDashboardBtnClicked,
+    isKelolaPartBtnClicked,
+    setIsKelolaPartBtnClicked,
+    setIsDashboardBtnClicked,
     setIsHistoryBtnClicked,
     setIsNgProduksiBtnClicked,
-    setIsNgMasukBtnClicked,
+    setIsLaporanNgBtnClicked,
+    allDataPart, 
+    setAllDataPart,
     part,
     shift,
     machine,
     date,
+    dataTotal,
     jenisNg,
     jumlahNg,
+    kodePart, 
+    namaPart, 
+    estimasiBeratPart, 
+    setKodePart,
+    setNamaPart,
+    setEstimasiBeratPart,
+    setDataTotal,
     setJenisNg,
     setJumlahNg,
     setPart,
@@ -73,19 +98,22 @@ export const StateBasketContextProvider = ({ children }) => {
     setDate,
     isUiHeaderDisabled,
     allDataReport,
-    historyData,
-    allDataByNik, setAllDataByNik,
-    setHistoryData,
+    recordData,
+    allDataByNik,
+    setAllDataByNik,
+    setRecordData,
     setAllDataReport,
     setIsUiHeaderDisabled,
     docId1,
     docId2,
+    docId3,
     setDocId1,
     setDocId2,
+    setDocId3,
     isModalAddDataOpen,
     isModalUpdateDataOpen,
     isModalChangeStatusOpen,
-    isModalNewReportOpen, 
+    isModalNewReportOpen,
     setIsModalNewReportOpen,
     setIsModalChangeStatusOpen,
     setIsModalAddDataOpen,
@@ -109,10 +137,12 @@ export const StateBasketContextProvider = ({ children }) => {
     isWrongPassword,
     setIsWrongPassword,
     isBtnLoading,
+    isError,
+    setIsError,
     password,
     setPassword,
     setIsBtnLoading,
-    errorMessage, 
+    errorMessage,
     setErrorMessage,
     estimasiTotalBerat,
     selectedEstimasiBerat,
@@ -132,6 +162,10 @@ export const StateBasketContextProvider = ({ children }) => {
     setIsNgKeluarBtnClicked,
     weightTolerance,
     setWeightTolerance,
+    isModalAddPartOpen,
+    setIsModalAddPartOpen,
+    isModalUpdatePartOpen,
+    setIsModalUpdatePartOpen,
   };
 
   return (

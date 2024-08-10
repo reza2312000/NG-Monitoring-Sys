@@ -1,9 +1,10 @@
-import { deleteHistoryCollection} from "@/lib/firestore/dataController/dataController";
+import {deleteAndSumData} from "@/lib/firestore/dataController/dataController";
 
-export default async function handlerDeleteHistoryCollection(req, res) {
+export default async function handlerDeleteDataCollection(req, res) {
   if (req.method === "DELETE") {
     try {
-      await deleteHistoryCollection();
+      const {date} = req.query;
+      await deleteAndSumData(date);
       res.status(200).json({ message: "Collection successfully deleted" });
     } catch (error) {
       console.error("Error deleting collection:", error);

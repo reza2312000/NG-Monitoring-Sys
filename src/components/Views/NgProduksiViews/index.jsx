@@ -1,5 +1,5 @@
-import { useDataControllerContext } from "@/context/reza/DataControllerContext";
-import { useStateBasketContext } from "@/context/reza/StateBasketContext";
+import { useDataControllerContext } from "@/context/DataControllerContext";
+import { useStateBasketContext } from "@/context/StateBasketContext";
 import {
   faPenToSquare,
   faPlus,
@@ -30,29 +30,25 @@ const NgProduksiViews = () => {
     setIsModalAddDataOpen,
     setIsModalNewReportOpen,
     setIsModalUpdateDataOpen,
+    isError,
+    allDataPart
   } = useStateBasketContext();
-  const { getDataByNik, getDataById, deleteData } = useDataControllerContext();
+  const { getDataByNik, getAllPart, getDataById, deleteData } = useDataControllerContext();
 
   const weightToleranceFilter = (part) => {
-    let tolerance;
-    switch (part) {
-      case "Lowertow":
-        tolerance = 5;
-        break;
-      case "Part 2":
-        tolerance = 10;
-        break;
-      case "Part 3":
-        tolerance = 1000;
-        break;
-      default:
-        tolerance = 20;
+    const filteredPart = allDataPart.filter((item) => item.nama === part);
+    let tolerance
+    if (filteredPart) {
+      filteredPart?.map((item)=>(
+        tolerance = item.tolerance
+      ))
+      return tolerance
     }
-    return tolerance;
   };
 
   useEffect(() => {
     getDataByNik();
+    getAllPart()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
@@ -99,14 +95,14 @@ const NgProduksiViews = () => {
                       </select>
                     </span>
                   </p>
-                  <p className="font-semibold">
+                  <p className={isError ? "text-error font-semibold" : "font-semibold"}>
                     Tanggal :
                     <span>
                       <input
                         type="date"
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
-                        className="input input-sm input-bordered mt-1 ms-2"
+                        className={isError ? "input input-sm input-bordered border-red-500 mt-1 ms-2" : "input input-sm input-bordered mt-1 ms-2"}
                         required
                       />
                     </span>
@@ -127,7 +123,7 @@ const NgProduksiViews = () => {
                 </button>
                 <button
                   onClick={()=> setIsModalNewReportOpen(true)}
-                  className="btn btn-sm btn-neutral shadow-md shadow-gray-300 border-2"
+                  className="btn btn-sm btn-info text-white shadow-md shadow-gray-300 border-2"
                 >
                   Laporan Baru
                   <span className="ms-1">
@@ -151,9 +147,8 @@ const NgProduksiViews = () => {
                 <tbody>
                   {allDataByNik.map((item, index) => {
                     const tolerance = weightToleranceFilter(item.data_NG.part);
-                    const isOverTolerance =
-                      item.data_NG.aktual_berat >=
-                      item.data_NG.estimasi_berat + tolerance;
+                    const isOverTolerance = item.data_NG.aktual_berat >=
+                    item.data_NG.estimasi_berat + tolerance;
                     return (
                       <tr
                         key={item.id}

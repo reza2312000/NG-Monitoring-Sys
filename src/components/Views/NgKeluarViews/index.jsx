@@ -1,19 +1,21 @@
-import { useDataControllerContext } from "@/context/reza/DataControllerContext";
-import { useStateBasketContext } from "@/context/reza/StateBasketContext";
+import { useDataControllerContext } from "@/context/DataControllerContext";
+import { useStateBasketContext } from "@/context/StateBasketContext";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import ModalAddActualWeight from "../ModalViews/ModalAddActualWeight";
 import { formatDate } from "date-fns";
+import Footer from "@/components/Footer";
 
 const NgKeluarViews = () => {
   const { data: session } = useSession();
-  const { getAllData, getDataById } = useDataControllerContext();
+  const { getAllData, getAdminDataById } = useDataControllerContext();
   const {
     allDataReport,
     isModalAddActualWeightOpen,
     setIsModalAddActualWeightOpen,
+    allDataPart
   } = useStateBasketContext();
 
   useEffect(() => {
@@ -22,22 +24,14 @@ const NgKeluarViews = () => {
   }, [session]);
 
   const weightToleranceFilter = (part) => {
-    console.log(part)
+    const filteredPart = allDataPart.filter((item) => item.nama === part);
     let tolerance;
-    switch (part) {
-      case "Lowertow":
-        tolerance = 5;
-        break;
-      case "Part 2":
-        tolerance = 10;
-        break;
-      case "Part 3":
-        tolerance = 1000;
-        break;
-      default:
-        tolerance = 20;
+    if (filteredPart) {
+      filteredPart?.map((item)=>(
+        tolerance = item.tolerance
+      ))
+      return tolerance
     }
-    return tolerance;
   };
 
   return (
@@ -55,6 +49,7 @@ const NgKeluarViews = () => {
                 <th className="text-center">No</th>
                 <th className="text-center">Nama Karyawan</th>
                 <th className="text-center">Mesin</th>
+                <th className="text-center">Shift</th>
                 <th className="text-center">Nama Part</th>
                 <th className="text-center">Jenis NG</th>
                 <th className="text-center">Jumlah</th>
@@ -68,9 +63,8 @@ const NgKeluarViews = () => {
             <tbody>
               {allDataReport.map((item, index) => {
                 const tolerance = weightToleranceFilter(item.data_NG.part);
-                const isOverTolerance =
-                  item.data_NG.aktual_berat >=
-                  item.data_NG.estimasi_berat + tolerance;
+                const isOverTolerance = item.data_NG.aktual_berat >=
+                item.data_NG.estimasi_berat + tolerance;
                 return (
                   <tr
                     key={item.id}
@@ -79,6 +73,7 @@ const NgKeluarViews = () => {
                     <td className="text-center">{index + 1}</td>
                     <td className="text-center font-semibold">{item.nama}</td>
                     <td className="text-center">{item.mesin}</td>
+                    <td className="text-center">{item.shift}</td>
                     <td className="text-center">{item.data_NG.part}</td>
                     <td className="text-center">{item.data_NG.jenis_NG}</td>
                     <td className="text-center text-error font-semibold">
@@ -111,7 +106,7 @@ const NgKeluarViews = () => {
                     <td className="text-center">
                       <button
                         onClick={() => {
-                          getDataById(item.id);
+                          getAdminDataById(item.id);
                           setIsModalAddActualWeightOpen(true);
                         }}
                         className="btn btn-sm btn-neutral"
@@ -125,6 +120,7 @@ const NgKeluarViews = () => {
             </tbody>
           </table>
         </div>
+        <Footer/>
       </div>
       {isModalAddActualWeightOpen && <ModalAddActualWeight />}
     </div>

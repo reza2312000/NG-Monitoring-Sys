@@ -1,42 +1,40 @@
-import { useDataControllerContext } from "@/context/reza/DataControllerContext";
-import { useStateBasketContext } from "@/context/reza/StateBasketContext";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { useDataControllerContext } from "@/context/DataControllerContext";
+import { useStateBasketContext } from "@/context/StateBasketContext";
+import { faFileExport, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
-import ModalAddActualWeight from "../ModalViews/ModalAddActualWeight";
 import { formatDate } from "date-fns";
 import ModalChangeStatus from "../ModalViews/ModalChangeStatus";
+import Footer from "@/components/Footer";
 
-const NgMasukViews = () => {
+const LaporanNgViews = () => {
   const { data: session } = useSession();
-  const { getAllData, getDataById } = useDataControllerContext();
+  const { getAllData, getAdminDataById, exportToExcel, deleteAndSumData } = useDataControllerContext();
   const {
     allDataReport,
     isModalChangeStatusOpen,
     setIsModalChangeStatusOpen,
+    allDataPart,
+    date, 
+    setDate
   } = useStateBasketContext();
 
+  
   const weightToleranceFilter = (part) => {
-    let tolerance;
-    switch (part) {
-      case "lowertow":
-        tolerance = 5;
-        break;
-      case "Part 2":
-        tolerance = 10;
-        break;
-      case "Part 3":
-        tolerance = 1000;
-        break;
-      default:
-        tolerance = 20;
+    const filteredPart = allDataPart.filter((item) => item.nama === part);
+    let tolerance
+    if (filteredPart) {
+      filteredPart?.map((item)=>(
+        tolerance = item.tolerance
+      ))
+      return tolerance
     }
-    return tolerance;
   };
-
+  
   useEffect(() => {
     getAllData();
+    allDataReport?.map((item)=> setDate(item.date))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
@@ -45,16 +43,18 @@ const NgMasukViews = () => {
       <div className="p-2 mx-auto">
         <div className="border-2 bg-white p-2">
           <div className="flex justify-between">
-            <h1 className="font-bold">NG Masuk</h1>
+            <h1 className="font-bold">Laporan NG</h1>
             <h1 className="font-bold text-blue-600 me-2">Admin Gudang</h1>
           </div>
-          <hr className="mt-2" />
+          <hr className="mt-2 mb-2" />
+          <button onClick={exportToExcel} className="btn btn-sm btn-info text-white">Export <FontAwesomeIcon icon={faFileExport} /></button>
           <table className="table border mt-3">
             <thead>
               <tr>
                 <th className="text-center">No</th>
-                <th className="text-center font-semibold">Nama Karyawan</th>
+                <th className="text-center">Operator</th>
                 <th className="text-center">Mesin</th>
+                <th className="text-center">Shift</th>
                 <th className="text-center">Nama Part</th>
                 <th className="text-center">Jenis NG</th>
                 <th className="text-center">Jumlah</th>
@@ -67,11 +67,9 @@ const NgMasukViews = () => {
             </thead>
             <tbody>
               {allDataReport.map((item, index) => {
-                const tolerance = weightToleranceFilter(item.data_NG.part);
-                const isOverTolerance =
-                  item.data_NG.aktual_berat >=
-                  item.data_NG.estimasi_berat + tolerance;
-
+                 const tolerance = weightToleranceFilter(item.data_NG.part);
+                 const isOverTolerance = item.data_NG.aktual_berat >=
+                 item.data_NG.estimasi_berat + tolerance;
                 return (
                   <tr
                     key={item.id}
@@ -80,6 +78,7 @@ const NgMasukViews = () => {
                     <td className="text-center">{index + 1}</td>
                     <td className="text-center">{item.nama}</td>
                     <td className="text-center">{item.mesin}</td>
+                    <td className="text-center">{item.shift}</td>
                     <td className="text-center">{item.data_NG.part}</td>
                     <td className="text-center">{item.data_NG.jenis_NG}</td>
                     <td className="text-center text-error font-semibold">
@@ -112,7 +111,7 @@ const NgMasukViews = () => {
                     <td className="text-center">
                       <button
                         onClick={() => {
-                          getDataById(item.id);
+                          getAdminDataById(item.id);
                           setIsModalChangeStatusOpen(true);
                         }}
                         className="btn btn-sm btn-neutral"
@@ -125,10 +124,14 @@ const NgMasukViews = () => {
               })}
             </tbody>
           </table>
+          <div className="flex justify-end mt-2">
+            <button onClick={()=>deleteAndSumData(date)} className="btn btn-sm btn-primary">Submit</button>
+          </div>
         </div>
+        <Footer/>
       </div>
       {isModalChangeStatusOpen && <ModalChangeStatus />}
     </div>
   );
 };
-export default NgMasukViews;
+export default LaporanNgViews;

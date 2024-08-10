@@ -1,8 +1,9 @@
-import { useDataControllerContext } from "@/context/reza/DataControllerContext";
-import { useStateBasketContext } from "@/context/reza/StateBasketContext";
+import { useDataControllerContext } from "@/context/DataControllerContext";
+import { useStateBasketContext } from "@/context/StateBasketContext";
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatDate } from "date-fns";
+import { useEffect } from "react";
 
 const { default: Modal } = require("@/components/Modal");
 
@@ -21,22 +22,19 @@ const ModalUpdateData = () => {
     setIsModalDeleteDataOpen,
     estimasiTotalBerat,
     setEstimasiTotalBerat,
+    allDataPart, 
+    part
   } = useStateBasketContext();
   const { updateData} = useDataControllerContext();
 
-  if (selectedPart === "Lowertow") {
-    let Lowertow = 0
-    Lowertow = selectedJumlahNg * 5
-    setEstimasiTotalBerat(Lowertow)
-  } else if (selectedPart === "Part 2") {
-    let part2 = 0
-    part2 = selectedJumlahNg * 10
-    setEstimasiTotalBerat(part2)
-  } else if (selectedPart === "Part 3") {
-    let part3 = 0
-    part3 = selectedJumlahNg * 1000
-    setEstimasiTotalBerat(part3)
-  }
+  useEffect(() => {
+    const filteredPart = allDataPart.find((item) => item.nama === selectedPart);
+    if (filteredPart) {
+      const countTotalNg = selectedJumlahNg * filteredPart.estimasiBerat
+      setEstimasiTotalBerat(countTotalNg);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedPart, selectedJumlahNg]);
 
   return (
     <Modal
@@ -77,10 +75,11 @@ const ModalUpdateData = () => {
                   onChange={(e) => setSelectedPart(e.target.value)}
                   className="select select-sm select-bordered mt-1 w-full"
                 >
-                  <option>Pilih Part</option>
-                  <option value="Part 1">Part 1</option>
-                  <option value="Part 2">Part 2</option>
-                  <option value="Part 3">Part 3</option>
+                    {allDataPart?.map((item) => (
+                    <option key={item.id} value={item.nama}>
+                      {item.nama}
+                    </option>
+                  ))}
                 </select>
               </label>
               <label className="flex flex-col mt-3">
@@ -111,7 +110,8 @@ const ModalUpdateData = () => {
               <label className="flex flex-col mt-3">
               <p className="font-semibold text-sm ms-1">Estimasi Total Berat :</p>
               <span>
-                <input value={estimasiTotalBerat ? `${estimasiTotalBerat} gr` : 0} onChange={(e)=> setEstimasiTotalBerat(e.target.value)} type="text" className="input input-sm input-bordered mt-1 w-full" disabled/>
+                <input value={estimasiTotalBerat ? `${estimasiTotalBerat} gr` : 0} 
+                onChange={(e)=> setEstimasiTotalBerat(e.target.value)} className="input input-sm input-bordered mt-1 w-full" disabled/>
               </span>
             </label>
             </div>

@@ -1,10 +1,10 @@
 import Modal from "@/components/Modal";
-import { useDataControllerContext } from "@/context/reza/DataControllerContext";
-import { useStateBasketContext } from "@/context/reza/StateBasketContext";
+import { useDataControllerContext } from "@/context/DataControllerContext";
+import { useStateBasketContext } from "@/context/StateBasketContext";
 
 const ModalNewReport = () => {
   const { setIsModalNewReportOpen, isBtnLoading } = useStateBasketContext();
-  const { deleteAllData } = useDataControllerContext();
+  const { newReport } = useDataControllerContext();
   return (
     <>
       <Modal
@@ -32,7 +32,7 @@ const ModalNewReport = () => {
                   Tidak
                 </button>
                 <button
-                  onClick={deleteAllData}
+                  onClick={newReport}
                   className="btn btn-sm btn-error ms-2"
                   disabled={isBtnLoading}
                 >

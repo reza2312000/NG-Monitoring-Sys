@@ -1,42 +1,56 @@
 import Sidebar from "@/components/Sidebar";
+import DashboardViews from "@/components/Views/DashboardViews";
 import HistoryViews from "@/components/Views/HistoryViews";
+import KelolaPartViews from "@/components/Views/KelolaPartViews";
 import NgKeluarViews from "@/components/Views/NgKeluarViews";
-import NgMasukViews from "@/components/Views/NgMasukViews";
+import LaporanNgViews from "@/components/Views/LaporanNgViews";
 import NgProduksiViews from "@/components/Views/NgProduksiViews";
-import { useStateBasketContext } from "@/context/reza/StateBasketContext";
-import { useSession } from "next-auth/react";
+import { useStateBasketContext } from "@/context/StateBasketContext";
+import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 const Dashboard = () => {
-  const {data: session} = useSession()
-  const router = useRouter()
-  const { isNgMasukBtnClicked, isNgProduksiBtnClicked, isNgKeluarBtnClicked, isHistoryBtnClicked } =
-    useStateBasketContext();
+  const { data: session } = useSession();
+  const router = useRouter();
+  const {
+    isDashboardBtnClicked,
+    isLaporanNgBtnClicked,
+    isNgProduksiBtnClicked,
+    isNgKeluarBtnClicked,
+    isHistoryBtnClicked,
+    isKelolaPartBtnClicked,
+  } = useStateBasketContext();
 
-    const checkSession = () => {
-      if(!session) {
-        router.push("/auth/login")
+  useEffect(() => {
+    const fetchSession = async () => {
+      const session = await getSession();
+      if (!session) {
+        router.push("/auth/login");
       }
-    }
-
-    useEffect(()=> {
-      checkSession()
+    };
+    fetchSession();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[session])
+  }, [session]);
 
   return (
     <div className="flex">
       <Sidebar />
-      {isNgMasukBtnClicked ? (
-        <NgMasukViews />
+      {isDashboardBtnClicked ? (
+        <DashboardViews />
+      ) : isLaporanNgBtnClicked ? (
+        <LaporanNgViews />
       ) : isNgProduksiBtnClicked ? (
         <NgProduksiViews />
       ) : isNgKeluarBtnClicked ? (
         <NgKeluarViews />
       ) : isHistoryBtnClicked ? (
-        <HistoryViews/>
-      ) : ""}
+        <HistoryViews />
+      ) : isKelolaPartBtnClicked ? (
+        <KelolaPartViews />
+      ) : (
+        ""
+      )}
     </div>
   );
 };

@@ -16,19 +16,13 @@ const Navbar = () => {
 
   const handleSignOut = async () => {
     await signOut();
-    router.push("/auth/login");
   };
 
   return (
     <div className="navbar bg-base-100 shadow-md">
       <div className="navbar-start">
-        <Link href={"/"} className="link ms-2">
-          <Image
-            src="/static/assets/kiyokuni.jpg"
-            alt="logo"
-            width={150}
-            height={150}
-          />
+        <Link href={"/"} className="text-xl ms-2 font-bold">
+        CV Anugrah Ikhsan Keluarga
         </Link>
       </div>
       <div className="navbar-end">

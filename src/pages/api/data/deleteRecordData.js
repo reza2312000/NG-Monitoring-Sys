@@ -1,9 +1,9 @@
-import {deleteDataCollection} from "@/lib/firestore/dataController/dataController";
+import { deleteRecordData} from "@/lib/firestore/dataController/dataController";
 
-export default async function handlerDeleteDataCollection(req, res) {
+export default async function handlerDeleteRecordData(req, res) {
   if (req.method === "DELETE") {
     try {
-      await deleteDataCollection();
+      await deleteRecordData();
       res.status(200).json({ message: "Collection successfully deleted" });
     } catch (error) {
       console.error("Error deleting collection:", error);

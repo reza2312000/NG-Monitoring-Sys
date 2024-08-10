@@ -1,9 +1,9 @@
 import "@/styles/globals.css";
 import Navbar from "@/components/Navbar";
 import { SessionProvider } from "next-auth/react";
-import { StateBasketContextProvider } from "@/context/reza/StateBasketContext";
-import { ToggleFunctionContextProvider } from "@/context/reza/ToggleFunctionContext";
-import { DataControllerContextProvider } from "@/context/reza/DataControllerContext";
+import { StateBasketContextProvider } from "@/context/StateBasketContext";
+import { ToggleFunctionContextProvider } from "@/context/ToggleFunctionContext";
+import { DataControllerContextProvider } from "@/context/DataControllerContext";
 
 export default function App({
   Component,

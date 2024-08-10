@@ -16,6 +16,7 @@
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
     "date-fns": "^3.6.0",
+    "file-saver": "^2.0.5",
     "firebase": "^10.11.1",
     "i": "^0.3.7",
     "jwt-decode": "^4.0.0",
@@ -23,7 +24,10 @@
     "next-auth": "^4.24.7",
     "npm": "^10.7.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "recharts": "^2.12.7",
+    "xlsx": "^0.18.5",
+    "xlsx-style": "^0.8.13"
   },
   "devDependencies": {
     "daisyui": "^4.10.2",

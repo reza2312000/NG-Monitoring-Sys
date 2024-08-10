@@ -1,11 +1,11 @@
-import { updateStatus } from "@/lib/firestore/dataController/dataController";
+import { updatePart } from "@/lib/firestore/dataController/dataController";
 
-export default async function handlerUpdateData(req, res) {
+export default async function handlerUpdatePart(req, res) {
   if (req.method === "PATCH") {
     try {
-      const { docId1, docId2, docId3, status } = req.body;
+      const { docId1, kodePart, namaPart, estimasiBeratPart, tolerance } = req.body;
 
-      await updateStatus(docId1, docId2, docId3, status);
+      await updatePart(docId1, kodePart, namaPart, estimasiBeratPart, tolerance);
       res.status(200).json({
         message: "Form data updated in Firestore successfully",
       });

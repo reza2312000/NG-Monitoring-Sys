@@ -3,10 +3,10 @@ import { updateActualWeight } from "@/lib/firestore/dataController/dataControlle
 export default async function handlerUpdateData(req, res) {
   if (req.method === "PATCH") {
     try {
-      const { docId1, docId2, part, jenisNg, jumlahNg, estimasiBerat, aktualBerat } =
+      const { docId1, docId2, docId3, part, jenisNg, jumlahNg, estimasiBerat, aktualBerat } =
         req.body;
 
-      await updateActualWeight(docId1, docId2, part, jenisNg, jumlahNg, estimasiBerat, aktualBerat);
+      await updateActualWeight(docId1, docId2, docId3, part, jenisNg, jumlahNg, estimasiBerat, aktualBerat);
       res.status(200).json({
         message: "Form data updated in Firestore successfully",
       });

@@ -1,5 +1,5 @@
-import { useDataControllerContext } from "@/context/reza/DataControllerContext";
-import { useStateBasketContext } from "@/context/reza/StateBasketContext";
+import { useDataControllerContext } from "@/context/DataControllerContext";
+import { useStateBasketContext } from "@/context/StateBasketContext";
 import { formatDate } from "date-fns";
 
 const { default: Modal } = require("@/components/Modal");
